@@ -26,12 +26,17 @@ const milestones = [
 
 const AboutSection = () => {
   return (
-    <section id="about" className="py-24 px-4 relative overflow-hidden bg-ivory">
+    <section id="about" className="py-28 px-4 relative overflow-hidden bg-ivory">
       {/* Temple pattern bg */}
-      <div className="absolute inset-0 opacity-[0.03]" style={{
+      <div className="absolute inset-0 opacity-[0.04]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='%23b8860b' stroke-width='0.5'/%3E%3C/svg%3E")`,
         backgroundSize: "60px 60px",
       }} />
+
+      {/* Ambient spotlight */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[40%] pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse at 50% 0%, hsla(43,70%,55%,0.06) 0%, transparent 60%)' }}
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <motion.div
@@ -43,7 +48,7 @@ const AboutSection = () => {
         >
           <p className="font-elegant text-base tracking-[0.3em] uppercase text-gold-dark mb-3">Our Story</p>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
-            A Legacy of <span className="text-gold-gradient">Golden Trust</span>
+            A Legacy of <span className="text-gold-gradient-shine">Golden Trust</span>
           </h2>
           <p className="font-body text-muted-foreground max-w-xl mx-auto">
             Rooted in India's timeless love for gold, Swarna Suraksha honours tradition with modern elegance.
@@ -52,7 +57,9 @@ const AboutSection = () => {
 
         <div className="relative">
           {/* Timeline line */}
-          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-gold/30 to-transparent hidden lg:block" />
+          <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px hidden lg:block"
+            style={{ background: 'linear-gradient(to bottom, transparent, hsl(43 80% 52% / 0.3), hsl(43 80% 52% / 0.4), hsl(43 80% 52% / 0.3), transparent)' }}
+          />
 
           <div className="space-y-16 lg:space-y-24">
             {milestones.map((item, index) => {
@@ -62,7 +69,7 @@ const AboutSection = () => {
               return (
                 <motion.div
                   key={item.title}
-                  initial={{ opacity: 0, x: isLeft ? -40 : 40 }}
+                  initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.7, delay: 0.1 }}
@@ -75,8 +82,10 @@ const AboutSection = () => {
                     <p className="font-body text-muted-foreground leading-relaxed">{item.description}</p>
                   </div>
 
-                  {/* Center icon */}
-                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg z-10">
+                  {/* Center icon with glow */}
+                  <div className="flex-shrink-0 w-16 h-16 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center z-10"
+                    style={{ boxShadow: '0 8px 30px -6px hsla(43, 80%, 50%, 0.4), 0 0 0 4px hsla(43, 80%, 55%, 0.1)' }}
+                  >
                     <Icon className="w-7 h-7 text-primary-foreground" />
                   </div>
 
