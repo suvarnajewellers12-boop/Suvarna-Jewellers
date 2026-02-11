@@ -1,0 +1,69 @@
+import { Crown } from "lucide-react";
+
+const footerLinks = [
+  { label: "Home", href: "#home" },
+  { label: "Products", href: "#products" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
+];
+
+const Footer = () => {
+  return (
+    <footer className="relative pt-16 pb-8 px-4 bg-cream overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 gold-divider" />
+
+      {/* Temple pattern */}
+      <div className="absolute inset-0 opacity-[0.02]" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='8' fill='none' stroke='%23b8860b' stroke-width='0.3'/%3E%3Ccircle cx='20' cy='20' r='16' fill='none' stroke='%23b8860b' stroke-width='0.3'/%3E%3C/svg%3E")`,
+      }} />
+
+      <div className="relative z-10 max-w-6xl mx-auto">
+        <div className="flex flex-col items-center text-center">
+          {/* Logo */}
+          <div className="flex items-center gap-2 mb-6">
+            <Crown className="w-8 h-8 text-gold" />
+            <span className="font-display text-2xl font-bold text-gold-gradient">Swarna Suraksha</span>
+          </div>
+
+          <p className="font-elegant text-lg italic text-muted-foreground mb-8 max-w-md">
+            Crafting golden dreams, preserving timeless traditions.
+          </p>
+
+          {/* Navigation */}
+          <nav className="flex flex-wrap justify-center gap-6 mb-8">
+            {footerLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="font-body text-sm text-muted-foreground hover:text-gold-dark transition-colors duration-300"
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+
+          {/* Social icons */}
+          <div className="flex gap-4 mb-8">
+            {["Facebook", "Instagram", "Twitter", "YouTube"].map((social) => (
+              <div
+                key={social}
+                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-xs font-body text-gold-dark hover:bg-gold/10 hover:border-gold/40 transition-all duration-300 cursor-pointer"
+              >
+                {social[0]}
+              </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div className="gold-divider w-48 mb-6" />
+
+          <p className="font-body text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Swarna Suraksha. All rights reserved. Crafted with ♥ in India.
+          </p>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
