@@ -24,14 +24,19 @@ const Navbar = () => {
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.8, ease: "easeOut" }}
-      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl rounded-full px-6 py-3 transition-all duration-500 ${
-        scrolled ? "glass-nav shadow-lg" : "bg-transparent"
+      className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl rounded-full px-6 py-3.5 transition-all duration-700 ${
+        scrolled ? "glass-nav-scrolled shadow-lg" : "glass-nav"
       }`}
     >
       <div className="flex items-center justify-between">
-        {/* Logo */}
-        <a href="#home" className="flex items-center gap-2 group">
-          <Crown className="w-7 h-7 text-gold transition-transform duration-300 group-hover:rotate-12" />
+        {/* Logo with floating animation */}
+        <a href="#home" className="flex items-center gap-2.5 group">
+          <motion.div
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Crown className="w-8 h-8 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+          </motion.div>
           <span className="font-display text-xl font-bold text-gold-gradient hidden sm:inline">
             Swarna Suraksha
           </span>
@@ -43,17 +48,19 @@ const Navbar = () => {
             <a
               key={link.label}
               href={link.href}
-              className="relative font-body text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-300 group"
+              className="relative font-body text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-300 group py-1"
             >
               {link.label}
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-gradient-to-r from-gold to-gold-dark transition-all duration-400 group-hover:w-full rounded-full" />
+              <span className="absolute -bottom-0.5 left-0 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-full"
+                style={{ background: 'linear-gradient(90deg, hsl(43 80% 52%), hsl(38 72% 38%), hsl(43 80% 52%))' }}
+              />
             </a>
           ))}
         </div>
 
         {/* Login CTA */}
         <div className="hidden md:block">
-          <button className="btn-gold text-sm px-6 py-2">Login</button>
+          <button className="btn-gold text-sm px-7 py-2.5">Login</button>
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -84,7 +91,7 @@ const Navbar = () => {
                 {link.label}
               </a>
             ))}
-            <button className="btn-gold text-sm px-6 py-2 mt-2">Login</button>
+            <button className="btn-gold text-sm px-7 py-2.5 mt-2">Login</button>
           </motion.div>
         )}
       </AnimatePresence>

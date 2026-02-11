@@ -1,4 +1,5 @@
 import { Crown } from "lucide-react";
+import { motion } from "framer-motion";
 
 const footerLinks = [
   { label: "Home", href: "#home" },
@@ -13,17 +14,27 @@ const Footer = () => {
       <div className="absolute top-0 left-0 right-0 gold-divider" />
 
       {/* Temple pattern */}
-      <div className="absolute inset-0 opacity-[0.02]" style={{
+      <div className="absolute inset-0 opacity-[0.03]" style={{
         backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='20' cy='20' r='8' fill='none' stroke='%23b8860b' stroke-width='0.3'/%3E%3Ccircle cx='20' cy='20' r='16' fill='none' stroke='%23b8860b' stroke-width='0.3'/%3E%3C/svg%3E")`,
       }} />
+
+      {/* Ambient glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[50%] h-[30%] pointer-events-none"
+        style={{ background: 'radial-gradient(ellipse, hsla(43,70%,55%,0.05) 0%, transparent 70%)' }}
+      />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         <div className="flex flex-col items-center text-center">
           {/* Logo */}
-          <div className="flex items-center gap-2 mb-6">
-            <Crown className="w-8 h-8 text-gold" />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex items-center gap-2.5 mb-6"
+          >
+            <Crown className="w-8 h-8 text-gold drop-shadow-sm" />
             <span className="font-display text-2xl font-bold text-gold-gradient">Swarna Suraksha</span>
-          </div>
+          </motion.div>
 
           <p className="font-elegant text-lg italic text-muted-foreground mb-8 max-w-md">
             Crafting golden dreams, preserving timeless traditions.
@@ -47,7 +58,7 @@ const Footer = () => {
             {["Facebook", "Instagram", "Twitter", "YouTube"].map((social) => (
               <div
                 key={social}
-                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-xs font-body text-gold-dark hover:bg-gold/10 hover:border-gold/40 transition-all duration-300 cursor-pointer"
+                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-xs font-body text-gold-dark hover:bg-gold/10 hover:border-gold/40 hover:shadow-[0_0_15px_hsla(43,80%,55%,0.15)] transition-all duration-300 cursor-pointer"
               >
                 {social[0]}
               </div>

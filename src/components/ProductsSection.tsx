@@ -67,19 +67,20 @@ const ProductModal = ({ product, onClose }: { product: Product; onClose: () => v
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
-    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/30 backdrop-blur-sm"
+    className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-foreground/30 backdrop-blur-md"
     onClick={onClose}
   >
     <motion.div
-      initial={{ scale: 0.9, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      exit={{ scale: 0.9, opacity: 0 }}
-      transition={{ type: "spring", damping: 25 }}
+      initial={{ scale: 0.85, opacity: 0, y: 40 }}
+      animate={{ scale: 1, opacity: 1, y: 0 }}
+      exit={{ scale: 0.85, opacity: 0, y: 40 }}
+      transition={{ type: "spring", damping: 22, stiffness: 260 }}
       onClick={(e) => e.stopPropagation()}
       className="glass-card rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-0"
+      style={{ boxShadow: '0 30px 80px -20px hsla(30, 30%, 15%, 0.25), 0 0 0 1px hsla(38, 60%, 55%, 0.2)' }}
     >
       <div className="relative">
-        <div className="aspect-video overflow-hidden rounded-t-3xl bg-cream">
+        <div className="aspect-video overflow-hidden rounded-t-3xl bg-cream spotlight">
           <img src={product.image} alt={product.name} className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" />
         </div>
         <button onClick={onClose} className="absolute top-4 right-4 w-10 h-10 rounded-full bg-pearl/80 backdrop-blur-sm flex items-center justify-center text-foreground hover:bg-pearl transition-colors">
@@ -113,9 +114,10 @@ const ProductsSection = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   return (
-    <section id="products" className="py-24 px-4 relative overflow-hidden">
-      {/* Decorative bg */}
+    <section id="products" className="py-28 px-4 relative overflow-hidden">
+      {/* Richer bg with spotlight */}
       <div className="absolute inset-0 bg-gradient-to-b from-cream via-pearl to-cream" />
+      <div className="absolute inset-0" style={{ background: 'var(--gradient-spotlight)' }} />
       <div className="absolute top-0 left-0 right-0 gold-divider" />
 
       <div className="relative z-10 max-w-7xl mx-auto">
@@ -124,11 +126,11 @@ const ProductsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-20"
         >
           <p className="font-elegant text-base tracking-[0.3em] uppercase text-gold-dark mb-3">Curated Collection</p>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
-            Exquisite <span className="text-gold-gradient">Treasures</span>
+            Exquisite <span className="text-gold-gradient-shine">Treasures</span>
           </h2>
           <p className="font-body text-muted-foreground max-w-xl mx-auto">
             Each piece tells a story of heritage, crafted with devotion and designed to be cherished for generations.
@@ -139,28 +141,28 @@ const ProductsSection = () => {
           {products.map((product, index) => (
             <motion.div
               key={product.name}
-              initial={{ opacity: 0, y: 40 }}
+              initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
+              transition={{ duration: 0.6, delay: index * 0.12 }}
               onClick={() => setSelectedProduct(product)}
-              className="product-card cursor-pointer group"
+              className="product-card cursor-pointer group spotlight"
             >
-              <div className="aspect-square overflow-hidden rounded-t-2xl bg-cream">
+              <div className="aspect-square overflow-hidden rounded-t-2xl bg-cream relative">
                 <img
                   src={product.image}
                   alt={product.name}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   loading="lazy"
                 />
+                {/* Pedestal shadow */}
+                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-foreground/8 to-transparent pointer-events-none" />
               </div>
               <div className="p-6">
                 <h3 className="font-display text-lg font-semibold text-foreground mb-1">{product.name}</h3>
                 <p className="font-display text-xl font-bold text-gold-gradient">{product.price}</p>
-                <p className="font-body text-xs text-muted-foreground mt-2">Click to explore</p>
+                <p className="font-body text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to explore ✦</p>
               </div>
-              {/* Spotlight glow on hover */}
-              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" style={{ boxShadow: "inset 0 0 60px hsla(43, 80%, 55%, 0.08)" }} />
             </motion.div>
           ))}
         </div>
