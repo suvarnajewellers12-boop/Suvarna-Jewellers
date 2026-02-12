@@ -1,15 +1,10 @@
-import Navbar from "@/components/Navbar";
+import Layout from "@/components/Layout";
 import ProductsSection from "@/components/ProductsSection";
-import Footer from "@/components/Footer";
 
-const Products = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <ProductsSection />
-      <Footer />
-    </div>
-  );
-};
+const Products = () => (
+  <Layout>
+    <ProductsSection />
+  </Layout>
+);
 
 export default Products;

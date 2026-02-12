@@ -1,15 +1,10 @@
-import Navbar from "@/components/Navbar";
+import Layout from "@/components/Layout";
 import ContactSection from "@/components/ContactSection";
-import Footer from "@/components/Footer";
 
-const Contact = () => {
-  return (
-    <div className="min-h-screen bg-background">
-      <Navbar />
-      <ContactSection />
-      <Footer />
-    </div>
-  );
-};
+const Contact = () => (
+  <Layout>
+    <ContactSection />
+  </Layout>
+);
 
 export default Contact;

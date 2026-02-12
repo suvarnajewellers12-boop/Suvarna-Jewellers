@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { X, RotateCcw } from "lucide-react";
+import { X, RotateCcw, BadgeCheck } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 import productNecklace from "@/assets/product-necklace.jpg";
 import productBridalSet from "@/assets/product-bridal-set.jpg";
@@ -10,57 +11,24 @@ import productEarrings from "@/assets/product-earrings.jpg";
 import productPooja from "@/assets/product-pooja.jpg";
 
 const products = [
-  {
-    name: "Gold Necklace",
-    price: "₹1,25,000",
-    image: productNecklace,
-    description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.",
-    story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next.",
-  },
-  {
-    name: "Bridal Temple Set",
-    price: "₹2,10,500",
-    image: productBridalSet,
-    description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.",
-    story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture.",
-  },
-  {
-    name: "Diamond Mangalsutra",
-    price: "₹75,000",
-    image: productMangalsutra,
-    description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.",
-    story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife.",
-  },
-  {
-    name: "Gold Bangles",
-    price: "₹95,000",
-    image: productBangles,
-    description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.",
-    story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings.",
-  },
-  {
-    name: "Bridal Earrings",
-    price: "₹55,000",
-    image: productEarrings,
-    description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.",
-    story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound.",
-  },
-  {
-    name: "Silver Pooja Collection",
-    price: "₹35,000",
-    image: productPooja,
-    description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.",
-    story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals.",
-  },
+  { name: "Gold Necklace", price: "₹1,25,000", numPrice: 125000, image: productNecklace, description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.", story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next." },
+  { name: "Bridal Temple Set", price: "₹2,10,500", numPrice: 210500, image: productBridalSet, description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.", story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture." },
+  { name: "Diamond Mangalsutra", price: "₹75,000", numPrice: 75000, image: productMangalsutra, description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.", story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife." },
+  { name: "Gold Bangles", price: "₹95,000", numPrice: 95000, image: productBangles, description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.", story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings." },
+  { name: "Bridal Earrings", price: "₹55,000", numPrice: 55000, image: productEarrings, description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.", story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound." },
+  { name: "Silver Pooja Collection", price: "₹35,000", numPrice: 35000, image: productPooja, description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.", story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals." },
 ];
 
 interface Product {
   name: string;
   price: string;
+  numPrice: number;
   image: string;
   description: string;
   story: string;
 }
+
+const formatINR = (n: number) => "₹" + n.toLocaleString("en-IN");
 
 const ProductModal = ({ product, onClose }: { product: Product; onClose: () => void }) => (
   <motion.div
@@ -112,10 +80,11 @@ const ProductModal = ({ product, onClose }: { product: Product; onClose: () => v
 
 const ProductsSection = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const { isLoggedIn, enrolledSchemes } = useAuth();
+  const totalSaved = enrolledSchemes.reduce((acc, s) => acc + s.monthlyAmount * s.paidMonths, 0);
 
   return (
     <section id="products" className="py-28 px-4 relative overflow-hidden">
-      {/* Richer bg with spotlight */}
       <div className="absolute inset-0 bg-gradient-to-b from-cream via-pearl to-cream" />
       <div className="absolute inset-0" style={{ background: 'var(--gradient-spotlight)' }} />
       <div className="absolute top-0 left-0 right-0 gold-divider" />
@@ -149,18 +118,23 @@ const ProductsSection = () => {
               className="product-card cursor-pointer group spotlight"
             >
               <div className="aspect-square overflow-hidden rounded-t-2xl bg-cream relative">
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  loading="lazy"
-                />
-                {/* Pedestal shadow */}
+                <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                 <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-foreground/8 to-transparent pointer-events-none" />
+                {isLoggedIn && totalSaved > 0 && (
+                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pearl/90 backdrop-blur-sm border border-gold/20">
+                    <BadgeCheck className="w-3.5 h-3.5 text-gold-dark" />
+                    <span className="font-body text-[11px] font-semibold text-foreground">Eligible via savings</span>
+                  </div>
+                )}
               </div>
               <div className="p-6">
                 <h3 className="font-display text-lg font-semibold text-foreground mb-1">{product.name}</h3>
                 <p className="font-display text-xl font-bold text-gold-gradient">{product.price}</p>
+                {isLoggedIn && totalSaved > 0 && (
+                  <p className="font-body text-xs text-gold-dark mt-1">
+                    Redeem {formatINR(Math.min(totalSaved, product.numPrice))} from saved gold
+                  </p>
+                )}
                 <p className="font-body text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to explore ✦</p>
               </div>
             </motion.div>

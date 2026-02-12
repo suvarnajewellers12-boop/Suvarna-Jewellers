@@ -43,7 +43,7 @@ const ContactSection = () => {
             className="rounded-3xl overflow-hidden relative"
             style={{ boxShadow: 'var(--shadow-depth)' }}
           >
-            <img src={showroomImg} alt="Swarna Suraksha showroom" className="w-full h-full object-cover min-h-[400px]" />
+            <img src={showroomImg} alt="Suvarna Jewellers showroom" className="w-full h-full object-cover min-h-[400px]" />
             {/* Glass overlay at bottom */}
             <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-foreground/15 to-transparent" />
           </motion.div>
@@ -61,7 +61,7 @@ const ContactSection = () => {
             <div className="space-y-5 mb-8">
               {[
                 { icon: Phone, label: "Phone", value: "+91 98765 43210" },
-                { icon: Mail, label: "Email", value: "support@swarnasuraksha.com" },
+                { icon: Mail, label: "Email", value: "support@suvarnajewellers.com" },
               ].map(({ icon: Icon, label, value }) => (
                 <div key={label} className="flex items-start gap-4">
                   <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center flex-shrink-0 border border-gold/15">
@@ -80,7 +80,7 @@ const ContactSection = () => {
                 <div>
                   <p className="font-body text-sm text-muted-foreground">Address</p>
                   <p className="font-body font-semibold text-foreground">
-                    Swarna Suraksha Showroom<br />
+                    Suvarna Jewellers Showroom<br />
                     D.No 10-45, Main Road, Gajuwaka<br />
                     Visakhapatnam, Andhra Pradesh – 530026<br />
                     India

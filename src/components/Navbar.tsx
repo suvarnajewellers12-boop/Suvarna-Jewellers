@@ -1,26 +1,43 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crown, Menu, X } from "lucide-react";
+import { Crown, Menu, X, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-
-const navLinks = [
-  { label: "Home", href: "/" },
-  { label: "Products", href: "/products" },
-  { label: "About", href: "/about" },
-  { label: "Contact Us", href: "/contact" },
-];
+import { useAuth } from "@/contexts/AuthContext";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { isLoggedIn, logout } = useAuth();
+
+  const navLinks = isLoggedIn
+    ? [
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Schemes", href: "/schemes" },
+        { label: "Live Rates", href: "/live-rates" },
+        { label: "Dashboard", href: "/dashboard" },
+      ]
+    : [
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Schemes", href: "/schemes" },
+        { label: "About", href: "/about" },
+        { label: "Contact Us", href: "/contact" },
+      ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+    setMobileOpen(false);
+  };
 
   return (
     <motion.nav
@@ -32,7 +49,6 @@ const Navbar = () => {
       }`}
     >
       <div className="flex items-center justify-between">
-        {/* Logo with floating animation */}
         <button onClick={() => navigate("/")} className="flex items-center gap-2.5 group">
           <motion.div
             animate={{ y: [0, -3, 0] }}
@@ -41,11 +57,10 @@ const Navbar = () => {
             <Crown className="w-8 h-8 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
           </motion.div>
           <span className="font-display text-xl font-bold text-gold-gradient hidden sm:inline">
-            Swarna Suraksha
+            Suvarna Jewellers
           </span>
         </button>
 
-        {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
             <button
@@ -65,12 +80,16 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Login CTA */}
         <div className="hidden md:block">
-          <button className="btn-gold text-sm px-7 py-2.5">Login</button>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="btn-gold text-sm px-7 py-2.5 flex items-center gap-2">
+              <LogOut className="w-4 h-4" /> Logout
+            </button>
+          ) : (
+            <button onClick={() => navigate("/login")} className="btn-gold text-sm px-7 py-2.5">Login</button>
+          )}
         </div>
 
-        {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
           className="md:hidden text-foreground p-2"
@@ -79,7 +98,6 @@ const Navbar = () => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -99,7 +117,13 @@ const Navbar = () => {
                 {link.label}
               </button>
             ))}
-            <button className="btn-gold text-sm px-7 py-2.5 mt-2">Login</button>
+            {isLoggedIn ? (
+              <button onClick={handleLogout} className="btn-gold text-sm px-7 py-2.5 mt-2 flex items-center gap-2">
+                <LogOut className="w-4 h-4" /> Logout
+              </button>
+            ) : (
+              <button onClick={() => { navigate("/login"); setMobileOpen(false); }} className="btn-gold text-sm px-7 py-2.5 mt-2">Login</button>
+            )}
           </motion.div>
         )}
       </AnimatePresence>

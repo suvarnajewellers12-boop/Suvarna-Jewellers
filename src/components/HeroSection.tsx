@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const SparkleParticles = () => {
@@ -29,7 +30,6 @@ const SparkleParticles = () => {
       }
     };
 
-    // Ambient particles — more and brighter
     for (let i = 0; i < 60; i++) {
       particles.push({
         x: Math.random() * canvas.width,
@@ -98,26 +98,19 @@ const SparkleParticles = () => {
 };
 
 const HeroSection = () => {
+  const navigate = useNavigate();
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Image with refined overlay — less washed out */}
       <div className="absolute inset-0">
-        <img
-          src={heroBg}
-          alt="Luxury Indian gold jewelry display"
-          className="w-full h-full object-cover scale-105"
-        />
-        {/* Reduced overlay opacity for richer jewelry visibility */}
+        <img src={heroBg} alt="Luxury Indian gold jewelry display" className="w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-gradient-to-b from-pearl/50 via-ivory/30 to-cream/60" />
         <div className="absolute inset-0 bg-gradient-to-r from-pearl/40 via-transparent to-pearl/40" />
       </div>
 
-      {/* Top spotlight */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-[50%] pointer-events-none z-[5]"
         style={{ background: 'radial-gradient(ellipse at 50% 0%, hsla(43,80%,55%,0.12) 0%, transparent 65%)' }}
       />
-
-      {/* Side spotlights */}
       <div className="absolute top-1/4 left-0 w-[30%] h-[60%] pointer-events-none z-[5]"
         style={{ background: 'radial-gradient(ellipse at 0% 50%, hsla(43,70%,55%,0.08) 0%, transparent 60%)' }}
       />
@@ -125,7 +118,6 @@ const HeroSection = () => {
         style={{ background: 'radial-gradient(ellipse at 100% 50%, hsla(43,70%,55%,0.08) 0%, transparent 60%)' }}
       />
 
-      {/* Metallic sweep animation */}
       <div className="absolute inset-0 pointer-events-none z-[6] overflow-hidden">
         <div className="absolute inset-0 animate-light-sweep"
           style={{
@@ -136,10 +128,8 @@ const HeroSection = () => {
         />
       </div>
 
-      {/* Sparkle Particles */}
       <SparkleParticles />
 
-      {/* Content */}
       <div className="relative z-20 text-center px-4 max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
@@ -181,16 +171,15 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 1 }}
           className="flex flex-col sm:flex-row gap-5 justify-center"
         >
-          <a href="#products" className="btn-gold btn-gold-pulse text-base md:text-lg px-12 py-4">
+          <button onClick={() => navigate("/schemes")} className="btn-gold btn-gold-pulse text-base md:text-lg px-12 py-4">
             Explore Schemes
-          </a>
-          <a href="#about" className="btn-rose-outline text-base md:text-lg px-12 py-4">
+          </button>
+          <button onClick={() => navigate("/products")} className="btn-rose-outline text-base md:text-lg px-12 py-4">
             Start Gold Journey
-          </a>
+          </button>
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
