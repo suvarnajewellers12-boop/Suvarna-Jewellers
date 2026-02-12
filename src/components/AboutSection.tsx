@@ -15,7 +15,7 @@ const milestones = [
   {
     icon: Shield,
     title: "Trust & Legacy",
-    description: "Swarna Suraksha was born from this very tradition. We believe every family deserves a dignified, transparent, and beautiful way to save for the gold that will adorn their most cherished celebrations.",
+    description: "Suvarna Jewellers was born from this very tradition. We believe every family deserves a dignified, transparent, and beautiful way to save for the gold that will adorn their most cherished celebrations.",
   },
   {
     icon: Gem,
@@ -51,7 +51,7 @@ const AboutSection = () => {
             A Legacy of <span className="text-gold-gradient-shine">Golden Trust</span>
           </h2>
           <p className="font-body text-muted-foreground max-w-xl mx-auto">
-            Rooted in India's timeless love for gold, Swarna Suraksha honours tradition with modern elegance.
+            Rooted in India's timeless love for gold, Suvarna Jewellers honours tradition with modern elegance.
           </p>
         </motion.div>
 
