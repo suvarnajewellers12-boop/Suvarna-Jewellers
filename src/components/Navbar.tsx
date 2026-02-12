@@ -1,17 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Crown, Menu, X } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const navLinks = [
-  { label: "Home", href: "#home" },
-  { label: "Products", href: "#products" },
-  { label: "About", href: "#about" },
-  { label: "Contact Us", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "Products", href: "/products" },
+  { label: "About", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
 ];
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -30,7 +33,7 @@ const Navbar = () => {
     >
       <div className="flex items-center justify-between">
         {/* Logo with floating animation */}
-        <a href="#home" className="flex items-center gap-2.5 group">
+        <button onClick={() => navigate("/")} className="flex items-center gap-2.5 group">
           <motion.div
             animate={{ y: [0, -3, 0] }}
             transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -40,21 +43,25 @@ const Navbar = () => {
           <span className="font-display text-xl font-bold text-gold-gradient hidden sm:inline">
             Swarna Suraksha
           </span>
-        </a>
+        </button>
 
         {/* Desktop Links */}
         <div className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a
+            <button
               key={link.label}
-              href={link.href}
-              className="relative font-body text-sm font-medium text-foreground/80 hover:text-foreground transition-colors duration-300 group py-1"
+              onClick={() => navigate(link.href)}
+              className={`relative font-body text-sm font-medium transition-colors duration-300 group py-1 ${
+                location.pathname === link.href ? "text-foreground" : "text-foreground/80 hover:text-foreground"
+              }`}
             >
               {link.label}
-              <span className="absolute -bottom-0.5 left-0 h-[2px] w-0 rounded-full transition-all duration-500 group-hover:w-full"
+              <span className={`absolute -bottom-0.5 left-0 h-[2px] rounded-full transition-all duration-500 ${
+                location.pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
+              }`}
                 style={{ background: 'linear-gradient(90deg, hsl(43 80% 52%), hsl(38 72% 38%), hsl(43 80% 52%))' }}
               />
-            </a>
+            </button>
           ))}
         </div>
 
@@ -82,14 +89,15 @@ const Navbar = () => {
             className="md:hidden mt-4 pb-4 flex flex-col items-center gap-4"
           >
             {navLinks.map((link) => (
-              <a
+              <button
                 key={link.label}
-                href={link.href}
-                onClick={() => setMobileOpen(false)}
-                className="font-body text-base text-foreground/80 hover:text-foreground transition-colors"
+                onClick={() => { navigate(link.href); setMobileOpen(false); }}
+                className={`font-body text-base transition-colors ${
+                  location.pathname === link.href ? "text-foreground" : "text-foreground/80 hover:text-foreground"
+                }`}
               >
                 {link.label}
-              </a>
+              </button>
             ))}
             <button className="btn-gold text-sm px-7 py-2.5 mt-2">Login</button>
           </motion.div>
