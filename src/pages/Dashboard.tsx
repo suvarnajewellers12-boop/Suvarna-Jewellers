@@ -1,21 +1,41 @@
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { TrendingUp, Calendar, ShoppingBag, BarChart3 } from "lucide-react";
+import { TrendingUp, Calendar, ShoppingBag, BarChart3, Sparkles } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
+import GoldDustParticles from "@/components/GoldDustParticles";
+import { useEffect, useState } from "react";
 
 const formatINR = (n: number) => "₹" + n.toLocaleString("en-IN");
 
-const AnimatedCounter = ({ value }: { value: number }) => (
-  <motion.span
-    className="font-display text-3xl md:text-4xl font-bold text-gold-gradient"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    transition={{ duration: 0.8 }}
-  >
-    {formatINR(value)}
-  </motion.span>
-);
+const AnimatedCounter = ({ value }: { value: number }) => {
+  const [display, setDisplay] = useState(0);
+
+  useEffect(() => {
+    if (value === 0) return;
+    const duration = 1200;
+    const start = performance.now();
+    const animate = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(value * eased));
+      if (progress < 1) requestAnimationFrame(animate);
+    };
+    requestAnimationFrame(animate);
+  }, [value]);
+
+  return (
+    <motion.span
+      className="font-display text-3xl md:text-4xl font-bold text-gold-gradient animate-text-glow"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
+    >
+      {formatINR(display)}
+    </motion.span>
+  );
+};
 
 const Dashboard = () => {
   const { user, enrolledSchemes } = useAuth();
@@ -29,19 +49,33 @@ const Dashboard = () => {
       <section className="pt-32 pb-28 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-cream via-pearl to-ivory" />
         <div className="absolute inset-0" style={{ background: 'var(--gradient-spotlight)' }} />
+        {/* Temple silhouette gradient */}
+        <div className="absolute top-0 left-0 right-0 h-48" style={{
+          background: 'linear-gradient(180deg, hsla(38, 40%, 75%, 0.08) 0%, transparent 100%)',
+        }} />
         <div className="absolute inset-0 opacity-[0.03]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30z' fill='none' stroke='%23b8860b' stroke-width='0.5'/%3E%3C/svg%3E")`,
         }} />
+        <div className="absolute top-0 left-0 right-0 gold-divider" />
+        <GoldDustParticles />
 
         <div className="relative z-10 max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-2">
+          {/* Welcome with golden radial glow behind */}
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="relative">
+            <div className="absolute -top-16 left-0 w-96 h-48 pointer-events-none" style={{
+              background: 'radial-gradient(ellipse at 30% 50%, hsla(43, 70%, 55%, 0.1) 0%, transparent 70%)',
+              filter: 'blur(30px)',
+            }} />
+            <h1 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-2 relative">
               Welcome, <span className="text-gold-gradient-shine">{user?.name || "Member"}</span>
             </h1>
-            <p className="font-elegant text-lg text-muted-foreground italic mb-12">Your golden portfolio at a glance</p>
+            <p className="font-elegant text-lg text-muted-foreground italic mb-3 relative">Your golden portfolio at a glance</p>
+            <p className="font-elegant text-sm text-gold-dark/70 italic mb-12 relative">
+              "Every gram you save today becomes tomorrow's celebration."
+            </p>
           </motion.div>
 
-          {/* Stats cards */}
+          {/* Stats cards with shimmer on values */}
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
             {[
               { icon: TrendingUp, label: "Total Gold Saved", value: <AnimatedCounter value={totalGold} /> },
@@ -54,9 +88,13 @@ const Dashboard = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="glass-card rounded-2xl p-6 spotlight"
+                className="glass-card rounded-2xl p-6 spotlight relative overflow-hidden group"
                 style={{ boxShadow: 'var(--shadow-card)' }}
               >
+                {/* Subtle shimmer sweep on hover */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                  style={{ background: 'linear-gradient(135deg, transparent, hsla(43,80%,60%,0.06), transparent)' }}
+                />
                 <stat.icon className="w-6 h-6 text-gold-dark mb-3" />
                 <p className="font-body text-sm text-muted-foreground mb-1">{stat.label}</p>
                 {stat.value}
@@ -64,8 +102,34 @@ const Dashboard = () => {
             ))}
           </div>
 
-          {/* Enrolled schemes */}
-          <h2 className="font-display text-2xl font-bold text-foreground mb-6">Your Schemes</h2>
+          {/* Celebratory sparkle strip for active schemes */}
+          {enrolledSchemes.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="flex items-center justify-center gap-3 mb-10"
+            >
+              <div className="h-px flex-1 max-w-24" style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--gold-light)))' }} />
+              <Sparkles className="w-4 h-4 text-gold-dark animate-glow-pulse" />
+              <p className="font-elegant text-sm text-gold-dark/80 italic tracking-wide">Your golden journey continues</p>
+              <Sparkles className="w-4 h-4 text-gold-dark animate-glow-pulse" />
+              <div className="h-px flex-1 max-w-24" style={{ background: 'linear-gradient(90deg, hsl(var(--gold-light)), transparent)' }} />
+            </motion.div>
+          )}
+
+          {/* Section header with gold underline sweep */}
+          <div className="relative mb-6">
+            <h2 className="font-display text-2xl font-bold text-foreground">Your Schemes</h2>
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="h-0.5 w-24 mt-2 origin-left"
+              style={{ background: 'var(--gradient-gold)' }}
+            />
+          </div>
+
           {enrolledSchemes.length === 0 ? (
             <div className="glass-card rounded-2xl p-8 text-center" style={{ boxShadow: 'var(--shadow-card)' }}>
               <p className="font-body text-muted-foreground mb-4">You haven't enrolled in any schemes yet.</p>
@@ -83,9 +147,12 @@ const Dashboard = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.1 }}
-                    className="glass-card rounded-2xl p-6"
+                    className="glass-card rounded-2xl p-6 relative overflow-hidden group"
                     style={{ boxShadow: 'var(--shadow-card)' }}
                   >
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                      style={{ background: 'linear-gradient(135deg, transparent, hsla(43,80%,60%,0.06), transparent)' }}
+                    />
                     <div className="flex items-center justify-between mb-3">
                       <h3 className="font-display text-lg font-bold text-foreground">{scheme.name}</h3>
                       <span className="px-2 py-0.5 rounded-full text-xs font-body font-semibold bg-gold/10 text-gold-dark border border-gold/20">
@@ -96,7 +163,7 @@ const Dashboard = () => {
                       {formatINR(scheme.monthlyAmount)}/month • {scheme.paidMonths}/{scheme.totalMonths} paid
                     </p>
                     <p className="font-body text-sm text-muted-foreground mb-3">
-                      Gold saved: {formatINR(scheme.monthlyAmount * scheme.paidMonths)}
+                      Gold saved: <span className="font-semibold text-gold-gradient">{formatINR(scheme.monthlyAmount * scheme.paidMonths)}</span>
                     </p>
                     <div className="w-full h-2 rounded-full bg-cream overflow-hidden">
                       <motion.div
@@ -119,12 +186,18 @@ const Dashboard = () => {
 
           {/* Quick links */}
           <div className="grid sm:grid-cols-2 gap-6">
-            <button onClick={() => navigate("/products")} className="glass-card rounded-2xl p-6 text-left hover:border-gold/40 transition-colors" style={{ boxShadow: 'var(--shadow-card)' }}>
+            <button onClick={() => navigate("/products")} className="glass-card rounded-2xl p-6 text-left hover:border-gold/40 transition-colors group relative overflow-hidden" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ background: 'linear-gradient(135deg, transparent, hsla(43,80%,60%,0.06), transparent)' }}
+              />
               <ShoppingBag className="w-6 h-6 text-gold-dark mb-2" />
               <h3 className="font-display text-lg font-bold text-foreground">Browse Products</h3>
               <p className="font-body text-sm text-muted-foreground">Explore our curated jewelry collection</p>
             </button>
-            <button onClick={() => navigate("/live-rates")} className="glass-card rounded-2xl p-6 text-left hover:border-gold/40 transition-colors" style={{ boxShadow: 'var(--shadow-card)' }}>
+            <button onClick={() => navigate("/live-rates")} className="glass-card rounded-2xl p-6 text-left hover:border-gold/40 transition-colors group relative overflow-hidden" style={{ boxShadow: 'var(--shadow-card)' }}>
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"
+                style={{ background: 'linear-gradient(135deg, transparent, hsla(43,80%,60%,0.06), transparent)' }}
+              />
               <BarChart3 className="w-6 h-6 text-gold-dark mb-2" />
               <h3 className="font-display text-lg font-bold text-foreground">Live Gold Rates</h3>
               <p className="font-body text-sm text-muted-foreground">Track today's gold and silver prices</p>
