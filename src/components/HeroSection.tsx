@@ -94,7 +94,7 @@ const SparkleParticles = () => {
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-auto" />;
+  return <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-auto" style={{ maxWidth: '100%' }} />;
 };
 
 const HeroSection = () => {
@@ -119,13 +119,15 @@ const HeroSection = () => {
       />
 
       <div className="absolute inset-0 pointer-events-none z-[6] overflow-hidden">
-        <div className="absolute inset-0 animate-light-sweep"
-          style={{
-            background: 'linear-gradient(90deg, transparent, hsla(43,80%,70%,0.06), hsla(43,80%,70%,0.12), hsla(43,80%,70%,0.06), transparent)',
-            width: '30%',
-            height: '100%',
-          }}
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute animate-light-sweep"
+            style={{
+              background: 'linear-gradient(90deg, transparent, hsla(43,80%,70%,0.06), hsla(43,80%,70%,0.12), hsla(43,80%,70%,0.06), transparent)',
+              width: '30%',
+              height: '100%',
+            }}
+          />
+        </div>
       </div>
 
       <SparkleParticles />

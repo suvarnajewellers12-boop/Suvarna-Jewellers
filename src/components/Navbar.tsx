@@ -93,7 +93,7 @@ const Navbar = () => {
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={`fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl rounded-full px-6 py-3.5 transition-all duration-700 ${
+        className={`fixed top-4 left-0 right-0 mx-auto z-50 w-[92%] max-w-[1100px] rounded-full px-6 py-3.5 transition-all duration-700 ${
           scrolled ? "glass-nav-scrolled shadow-lg" : "glass-nav"
         }`}
       >
