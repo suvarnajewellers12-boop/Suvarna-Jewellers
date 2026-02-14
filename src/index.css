@@ -385,22 +385,9 @@
   }
 }
 
-/* Smooth scrolling & global stability */
+/* Smooth scrolling */
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
-}
-
-body {
-  overflow-x: hidden;
-}
-
-/* Global page container */
-.page-container {
-  max-width: 1440px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 100%;
 }
 
 /* Custom scrollbar */

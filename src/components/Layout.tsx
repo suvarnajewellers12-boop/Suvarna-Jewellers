@@ -3,11 +3,9 @@ import Footer from "@/components/Footer";
 import { ReactNode } from "react";
 
 const Layout = ({ children }: { children: ReactNode }) => (
-  <div className="min-h-screen bg-background overflow-x-hidden">
+  <div className="min-h-screen bg-background">
     <Navbar />
-    <div className="page-container">
-      {children}
-    </div>
+    {children}
     <Footer />
   </div>
 );
