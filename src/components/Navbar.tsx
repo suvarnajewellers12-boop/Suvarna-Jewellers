@@ -1,13 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crown, Menu, X, User, LayoutDashboard, Gem, TrendingUp, LogOut } from "lucide-react";
+import { Crown, User, LayoutDashboard, Gem, TrendingUp, LogOut } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutModal from "@/components/LogoutModal";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutSuccess, setLogoutSuccess] = useState(false);
@@ -44,7 +43,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
@@ -66,14 +64,8 @@ const Navbar = () => {
     }, 600);
   };
 
-  const handleMobileLogout = () => {
-    setMobileOpen(false);
-    setShowLogoutModal(true);
-  };
-
   return (
     <>
-      {/* Logout success golden flash overlay */}
       <AnimatePresence>
         {logoutSuccess && (
           <motion.div
@@ -97,7 +89,23 @@ const Navbar = () => {
           scrolled ? "glass-nav-scrolled shadow-lg" : "glass-nav"
         }`}
       >
-        <div className="flex items-center justify-between">
+        {/* Mobile: centered brand capsule only */}
+        <div className="flex md:hidden items-center justify-center w-full">
+          <button onClick={() => navigate("/")} className="flex items-center gap-2.5 group">
+            <motion.div
+              animate={{ y: [0, -3, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <Crown className="w-7 h-7 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+            </motion.div>
+            <span className="font-display text-lg font-bold text-gold-gradient">
+              Suvarna Jewellers
+            </span>
+          </button>
+        </div>
+
+        {/* Desktop: full navigation */}
+        <div className="hidden md:flex items-center justify-between w-full">
           <button onClick={() => navigate("/")} className="flex items-center gap-2.5 group">
             <motion.div
               animate={{ y: [0, -3, 0] }}
@@ -105,12 +113,12 @@ const Navbar = () => {
             >
               <Crown className="w-8 h-8 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
             </motion.div>
-            <span className="font-display text-xl font-bold text-gold-gradient hidden sm:inline">
+            <span className="font-display text-xl font-bold text-gold-gradient">
               Suvarna Jewellers
             </span>
           </button>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="flex items-center gap-8">
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -129,7 +137,7 @@ const Navbar = () => {
             ))}
           </div>
 
-          <div className="hidden md:block">
+          <div>
             {isLoggedIn ? (
               <div ref={profileRef} className="relative">
                 <button
@@ -166,13 +174,10 @@ const Navbar = () => {
                         boxShadow: "var(--shadow-luxury), 0 0 40px hsla(43,80%,55%,0.08)",
                       }}
                     >
-                      {/* User info header */}
                       <div className="px-5 py-4 border-b border-border/50">
                         <p className="font-display text-sm font-semibold text-foreground">{user?.name}</p>
                         <p className="font-body text-xs text-muted-foreground mt-0.5">{user?.phone}</p>
                       </div>
-
-                      {/* Menu items */}
                       <div className="py-2">
                         {profileMenuItems.map((item) => (
                           <button
@@ -180,7 +185,6 @@ const Navbar = () => {
                             onClick={() => { navigate(item.href); setProfileOpen(false); }}
                             className="relative w-full flex items-center gap-3 px-5 py-2.5 font-body text-sm text-foreground/80 hover:text-foreground transition-all duration-300 group overflow-hidden"
                           >
-                            {/* Shimmer hover bg */}
                             <span
                               className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                               style={{ background: "linear-gradient(90deg, hsla(43,80%,55%,0.06), hsla(43,80%,55%,0.12), hsla(43,80%,55%,0.06))" }}
@@ -190,8 +194,6 @@ const Navbar = () => {
                           </button>
                         ))}
                       </div>
-
-                      {/* Logout */}
                       <div className="border-t border-border/50 py-2">
                         <button
                           onClick={() => { setProfileOpen(false); setShowLogoutModal(true); }}
@@ -213,52 +215,7 @@ const Navbar = () => {
               <button onClick={() => navigate("/login")} className="btn-gold text-sm px-7 py-2.5">Login</button>
             )}
           </div>
-
-          <button
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="md:hidden text-foreground p-2"
-          >
-            {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
         </div>
-
-        <AnimatePresence>
-          {mobileOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden mt-4 pb-4 flex flex-col items-center gap-4"
-            >
-              {navLinks.map((link) => (
-                <button
-                  key={link.label}
-                  onClick={() => { navigate(link.href); setMobileOpen(false); }}
-                  className={`font-body text-base transition-colors ${
-                    location.pathname === link.href ? "text-foreground" : "text-foreground/80 hover:text-foreground"
-                  }`}
-                >
-                  {link.label}
-                </button>
-              ))}
-              {isLoggedIn ? (
-                <>
-                  <button
-                    onClick={() => { navigate("/my-schemes"); setMobileOpen(false); }}
-                    className="font-body text-base text-foreground/80 hover:text-foreground transition-colors"
-                  >
-                    My Schemes
-                  </button>
-                  <button onClick={handleMobileLogout} className="btn-gold text-sm px-7 py-2.5 mt-2 flex items-center gap-2">
-                    <LogOut className="w-4 h-4" /> Logout
-                  </button>
-                </>
-              ) : (
-                <button onClick={() => { navigate("/login"); setMobileOpen(false); }} className="btn-gold text-sm px-7 py-2.5 mt-2">Login</button>
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
       </motion.nav>
 
       <LogoutModal
