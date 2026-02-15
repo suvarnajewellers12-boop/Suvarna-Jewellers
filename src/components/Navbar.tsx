@@ -16,38 +16,23 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, user, logout } = useAuth();
+  const isLoginPage = location.pathname === "/login";
 
+  // Shared links visible to all users
+  const commonLinks = [
+    { label: "Home", href: "/" },
+    { label: "Products", href: "/products" },
+    { label: "Schemes", href: "/schemes" },
+    { label: "Live Rates", href: "/live-rates" },
+  ];
+
+  // Desktop nav links: add Dashboard when logged in
   const navLinks = isLoggedIn
-    ? [
-        { label: "Home", href: "/" },
-        { label: "Products", href: "/products" },
-        { label: "Schemes", href: "/schemes" },
-        { label: "Live Rates", href: "/live-rates" },
-        { label: "Dashboard", href: "/dashboard" },
-      ]
-    : [
-        { label: "Home", href: "/" },
-        { label: "Products", href: "/products" },
-        { label: "Schemes", href: "/schemes" },
-        { label: "About", href: "/about" },
-        { label: "Contact Us", href: "/contact" },
-      ];
+    ? [...commonLinks, { label: "Dashboard", href: "/dashboard" }]
+    : commonLinks;
 
-  const mobileNavLinks = isLoggedIn
-    ? [
-        { label: "Home", href: "/" },
-        { label: "Products", href: "/products" },
-        { label: "Schemes", href: "/schemes" },
-        { label: "Live Rates", href: "/live-rates" },
-        { label: "Dashboard", href: "/dashboard" },
-      ]
-    : [
-        { label: "Home", href: "/" },
-        { label: "Products", href: "/products" },
-        { label: "Schemes", href: "/schemes" },
-        { label: "About", href: "/about" },
-        { label: "Contact Us", href: "/contact" },
-      ];
+  // Mobile nav links: same as desktop
+  const mobileNavLinks = navLinks;
 
   const profileMenuItems = [
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -246,7 +231,9 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
             ) : (
-              <button onClick={() => navigate("/login")} className="btn-gold text-sm px-7 py-2.5">Login</button>
+              !isLoginPage && (
+                <button onClick={() => navigate("/login")} className="btn-gold text-sm px-7 py-2.5">Login</button>
+              )
             )}
           </div>
         </div>
@@ -377,8 +364,8 @@ const Navbar = () => {
                 </>
               )}
 
-              {/* Login for non-logged-in users */}
-              {!isLoggedIn && (
+              {/* Login for non-logged-in users (hide on login page) */}
+              {!isLoggedIn && !isLoginPage && (
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
