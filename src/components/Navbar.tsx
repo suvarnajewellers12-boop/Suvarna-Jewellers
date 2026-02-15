@@ -1,21 +1,39 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crown, User, LayoutDashboard, Gem, TrendingUp, LogOut } from "lucide-react";
+import { Crown, User, LayoutDashboard, Gem, TrendingUp, LogOut, Sparkles } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutModal from "@/components/LogoutModal";
+import GoldDustParticles from "@/components/GoldDustParticles";
 
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [logoutSuccess, setLogoutSuccess] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, user, logout } = useAuth();
 
   const navLinks = isLoggedIn
+    ? [
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Schemes", href: "/schemes" },
+        { label: "Live Rates", href: "/live-rates" },
+        { label: "Dashboard", href: "/dashboard" },
+      ]
+    : [
+        { label: "Home", href: "/" },
+        { label: "Products", href: "/products" },
+        { label: "Schemes", href: "/schemes" },
+        { label: "About", href: "/about" },
+        { label: "Contact Us", href: "/contact" },
+      ];
+
+  const mobileNavLinks = isLoggedIn
     ? [
         { label: "Home", href: "/" },
         { label: "Products", href: "/products" },
@@ -89,8 +107,12 @@ const Navbar = () => {
           scrolled ? "glass-nav-scrolled shadow-lg" : "glass-nav"
         }`}
       >
-        {/* Mobile: centered brand capsule only */}
-        <div className="flex md:hidden items-center justify-center w-full">
+        {/* Mobile: centered brand capsule + menu trigger */}
+        <div className="flex md:hidden items-center justify-between w-full relative">
+          {/* Left spacer for symmetry */}
+          <div className="w-9" />
+          
+          {/* Centered brand */}
           <button onClick={() => navigate("/")} className="flex items-center gap-2.5 group">
             <motion.div
               animate={{ y: [0, -3, 0] }}
@@ -101,6 +123,18 @@ const Navbar = () => {
             <span className="font-display text-lg font-bold text-gold-gradient">
               Suvarna Jewellers
             </span>
+          </button>
+
+          {/* Menu trigger */}
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300"
+            style={{
+              background: "linear-gradient(135deg, hsla(43,80%,55%,0.15), hsla(43,80%,55%,0.08))",
+              border: "1px solid hsla(43,80%,60%,0.3)",
+            }}
+          >
+            <Sparkles className="w-4 h-4 text-gold" />
           </button>
         </div>
 
@@ -217,6 +251,148 @@ const Navbar = () => {
           </div>
         </div>
       </motion.nav>
+
+      {/* Mobile full-screen royal overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
+            className="fixed inset-0 z-[100] md:hidden"
+            style={{
+              background: "linear-gradient(180deg, hsla(30, 20%, 8%, 0.97) 0%, hsla(25, 18%, 12%, 0.98) 50%, hsla(30, 20%, 8%, 0.97) 100%)",
+              backdropFilter: "blur(40px)",
+            }}
+          >
+            {/* Gold dust particles */}
+            <div className="absolute inset-0 overflow-hidden">
+              <GoldDustParticles />
+            </div>
+
+            {/* Velvet spotlight */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse at 50% 30%, hsla(43,80%,50%,0.08) 0%, transparent 60%)",
+              }}
+            />
+
+            {/* Close button */}
+            <motion.button
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.3 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="absolute top-6 right-6 w-10 h-10 rounded-full flex items-center justify-center z-10"
+              style={{
+                background: "linear-gradient(135deg, hsla(43,80%,55%,0.15), hsla(43,80%,55%,0.05))",
+                border: "1px solid hsla(43,80%,60%,0.25)",
+              }}
+            >
+              <span className="font-display text-gold text-lg">✕</span>
+            </motion.button>
+
+            {/* Brand header */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15, duration: 0.5 }}
+              className="flex flex-col items-center pt-16 pb-8"
+            >
+              <Crown className="w-10 h-10 text-gold mb-3" />
+              <span className="font-display text-xl font-bold text-gold-gradient">
+                Suvarna Jewellers
+              </span>
+            </motion.div>
+
+            {/* Decorative divider */}
+            <div className="flex justify-center mb-6">
+              <div
+                className="w-24 h-[1px]"
+                style={{ background: "linear-gradient(90deg, transparent, hsla(43,80%,55%,0.4), transparent)" }}
+              />
+            </div>
+
+            {/* Navigation items */}
+            <nav className="flex flex-col items-center gap-2 px-8 relative z-10">
+              {mobileNavLinks.map((link, i) => (
+                <motion.button
+                  key={link.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + i * 0.07, duration: 0.4, ease: "easeOut" }}
+                  onClick={() => { navigate(link.href); setMobileMenuOpen(false); }}
+                  className={`relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center transition-all duration-300 group rounded-xl overflow-hidden ${
+                    location.pathname === link.href
+                      ? "text-gold"
+                      : "text-foreground/70"
+                  }`}
+                >
+                  <span
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                    style={{
+                      background: "linear-gradient(90deg, hsla(43,80%,55%,0.04), hsla(43,80%,55%,0.1), hsla(43,80%,55%,0.04))",
+                    }}
+                  />
+                  <span className="relative z-10">{link.label}</span>
+                  {location.pathname === link.href && (
+                    <motion.div
+                      layoutId="mobile-active"
+                      className="absolute bottom-2 left-1/2 -translate-x-1/2 w-8 h-[2px] rounded-full"
+                      style={{ background: "linear-gradient(90deg, hsla(43,80%,55%,0.6), hsla(43,80%,55%,1), hsla(43,80%,55%,0.6))" }}
+                    />
+                  )}
+                </motion.button>
+              ))}
+
+              {/* Logout option for logged-in users */}
+              {isLoggedIn && (
+                <>
+                  <div className="flex justify-center my-2">
+                    <div
+                      className="w-16 h-[1px]"
+                      style={{ background: "linear-gradient(90deg, transparent, hsla(43,80%,55%,0.25), transparent)" }}
+                    />
+                  </div>
+                  <motion.button
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 + mobileNavLinks.length * 0.07, duration: 0.4 }}
+                    onClick={() => { setMobileMenuOpen(false); setShowLogoutModal(true); }}
+                    className="relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center text-foreground/60 transition-all duration-300 group rounded-xl overflow-hidden"
+                  >
+                    <span
+                      className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
+                      style={{
+                        background: "linear-gradient(90deg, hsla(350,60%,50%,0.03), hsla(350,60%,50%,0.06), hsla(350,60%,50%,0.03))",
+                      }}
+                    />
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      <LogOut className="w-4 h-4" />
+                      Logout
+                    </span>
+                  </motion.button>
+                </>
+              )}
+
+              {/* Login for non-logged-in users */}
+              {!isLoggedIn && (
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2 + mobileNavLinks.length * 0.07, duration: 0.4 }}
+                  onClick={() => { navigate("/login"); setMobileMenuOpen(false); }}
+                  className="mt-4 btn-gold text-sm px-10 py-3"
+                >
+                  Login
+                </motion.button>
+              )}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <LogoutModal
         open={showLogoutModal}
