@@ -311,11 +311,12 @@ const Navbar = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2 + i * 0.07, duration: 0.4, ease: "easeOut" }}
                   onClick={() => { navigate(link.href); setMobileMenuOpen(false); }}
-                  className={`relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center transition-all duration-300 group rounded-xl overflow-hidden ${
-                    location.pathname === link.href
-                      ? "text-gold"
-                      : "text-foreground/70"
-                  }`}
+                  className="relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center transition-all duration-300 group rounded-xl overflow-hidden"
+                  style={{
+                    color: location.pathname === link.href
+                      ? "hsla(43, 80%, 55%, 1)"
+                      : "hsla(39, 50%, 88%, 0.9)",
+                  }}
                 >
                   <span
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
@@ -348,7 +349,8 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 + mobileNavLinks.length * 0.07, duration: 0.4 }}
                     onClick={() => { setMobileMenuOpen(false); setShowLogoutModal(true); }}
-                    className="relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center text-foreground/60 transition-all duration-300 group rounded-xl overflow-hidden"
+                    className="relative w-full max-w-xs py-4 font-display text-lg tracking-wide text-center transition-all duration-300 group rounded-xl overflow-hidden"
+                    style={{ color: "hsla(39, 50%, 88%, 0.85)" }}
                   >
                     <span
                       className="absolute inset-0 opacity-0 group-hover:opacity-100 group-active:opacity-100 transition-opacity duration-300"
