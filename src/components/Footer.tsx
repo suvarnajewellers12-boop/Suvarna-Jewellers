@@ -53,17 +53,6 @@ const Footer = () => {
             ))}
           </nav>
 
-          <div className="flex gap-4 mb-8">
-            {["Facebook", "Instagram", "Twitter", "YouTube"].map((social) => (
-              <div
-                key={social}
-                className="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center text-xs font-body text-gold-dark hover:bg-gold/10 hover:border-gold/40 hover:shadow-[0_0_15px_hsla(43,80%,55%,0.15)] transition-all duration-300 cursor-pointer"
-              >
-                {social[0]}
-              </div>
-            ))}
-          </div>
-
           <div className="gold-divider w-48 mb-6" />
 
           <p className="font-body text-xs text-muted-foreground">
