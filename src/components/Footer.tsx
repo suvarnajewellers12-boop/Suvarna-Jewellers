@@ -1,4 +1,4 @@
-import { Crown } from "lucide-react";
+import suvarnaLogo from "@/assets/suvarna-logo.png";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -33,7 +33,7 @@ const Footer = () => {
             viewport={{ once: true }}
             className="flex items-center gap-2.5 mb-6"
           >
-            <Crown className="w-8 h-8 text-gold drop-shadow-sm" />
+            <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-8 h-8 drop-shadow-sm object-contain" />
             <span className="font-display text-2xl font-bold text-gold-gradient">Suvarna Jewellers</span>
           </motion.div>
 

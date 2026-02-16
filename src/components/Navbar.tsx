@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Crown, User, LayoutDashboard, Gem, TrendingUp, LogOut, Sparkles } from "lucide-react";
+import { User, LayoutDashboard, Gem, TrendingUp, LogOut, Sparkles } from "lucide-react";
+import suvarnaLogo from "@/assets/suvarna-logo.png";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import LogoutModal from "@/components/LogoutModal";
@@ -103,7 +104,7 @@ const Navbar = () => {
               animate={{ y: [0, -3, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Crown className="w-7 h-7 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-7 h-7 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain" />
             </motion.div>
             <span className="font-display text-lg font-bold text-gold-gradient">
               Suvarna Jewellers
@@ -130,7 +131,7 @@ const Navbar = () => {
               animate={{ y: [0, -3, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <Crown className="w-8 h-8 text-gold drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110" />
+              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-8 h-8 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain" />
             </motion.div>
             <span className="font-display text-xl font-bold text-gold-gradient">
               Suvarna Jewellers
@@ -288,7 +289,7 @@ const Navbar = () => {
               transition={{ delay: 0.15, duration: 0.5 }}
               className="flex flex-col items-center pt-16 pb-8"
             >
-              <Crown className="w-10 h-10 text-gold mb-3" />
+              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-10 h-10 mb-3 object-contain" />
               <span className="font-display text-xl font-bold text-gold-gradient">
                 Suvarna Jewellers
               </span>
