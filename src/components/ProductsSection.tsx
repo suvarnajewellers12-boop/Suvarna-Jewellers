@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, RotateCcw, BadgeCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -10,14 +10,7 @@ import productBangles from "@/assets/product-bangles.jpg";
 import productEarrings from "@/assets/product-earrings.jpg";
 import productPooja from "@/assets/product-pooja.jpg";
 
-const products = [
-  { name: "Gold Necklace", price: "₹1,25,000", numPrice: 125000, image: productNecklace, description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.", story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next." },
-  { name: "Bridal Temple Set", price: "₹2,10,500", numPrice: 210500, image: productBridalSet, description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.", story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture." },
-  { name: "Diamond Mangalsutra", price: "₹75,000", numPrice: 75000, image: productMangalsutra, description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.", story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife." },
-  { name: "Gold Bangles", price: "₹95,000", numPrice: 95000, image: productBangles, description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.", story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings." },
-  { name: "Bridal Earrings", price: "₹55,000", numPrice: 55000, image: productEarrings, description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.", story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound." },
-  { name: "Silver Pooja Collection", price: "₹35,000", numPrice: 35000, image: productPooja, description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.", story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals." },
-];
+type Category = "gold" | "silver";
 
 interface Product {
   name: string;
@@ -26,7 +19,23 @@ interface Product {
   image: string;
   description: string;
   story: string;
+  category: Category;
+  subcategory: string;
 }
+
+const products: Product[] = [
+  { name: "Gold Necklace", price: "₹1,25,000", numPrice: 125000, image: productNecklace, description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.", story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next.", category: "gold", subcategory: "Gold Chains" },
+  { name: "Bridal Temple Set", price: "₹2,10,500", numPrice: 210500, image: productBridalSet, description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.", story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture.", category: "gold", subcategory: "Gold Bangles" },
+  { name: "Diamond Mangalsutra", price: "₹75,000", numPrice: 75000, image: productMangalsutra, description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.", story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife.", category: "gold", subcategory: "Gold Chains" },
+  { name: "Gold Bangles", price: "₹95,000", numPrice: 95000, image: productBangles, description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.", story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings.", category: "gold", subcategory: "Gold Bangles" },
+  { name: "Bridal Earrings", price: "₹55,000", numPrice: 55000, image: productEarrings, description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.", story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound.", category: "gold", subcategory: "Gold Rings" },
+  { name: "Silver Pooja Collection", price: "₹35,000", numPrice: 35000, image: productPooja, description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.", story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals.", category: "silver", subcategory: "Silver Idols" },
+];
+
+const subcategories: Record<Category, string[]> = {
+  gold: ["All", "Gold Rings", "Gold Chains", "Gold Bangles", "Gold Anklets"],
+  silver: ["All", "Silver Idols", "Silver Earrings", "Silver Chains", "Silver Anklets"],
+};
 
 const formatINR = (n: number) => "₹" + n.toLocaleString("en-IN");
 
@@ -80,8 +89,21 @@ const ProductModal = ({ product, onClose }: { product: Product; onClose: () => v
 
 const ProductsSection = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [activeCategory, setActiveCategory] = useState<Category>("gold");
+  const [activeSubcategory, setActiveSubcategory] = useState("All");
   const { isLoggedIn, enrolledSchemes } = useAuth();
   const totalSaved = enrolledSchemes.reduce((acc, s) => acc + s.monthlyAmount * s.paidMonths, 0);
+
+  const filteredProducts = products.filter(
+    (p) =>
+      p.category === activeCategory &&
+      (activeSubcategory === "All" || p.subcategory === activeSubcategory)
+  );
+
+  const handleCategoryChange = (cat: Category) => {
+    setActiveCategory(cat);
+    setActiveSubcategory("All");
+  };
 
   return (
     <section id="products" className="py-28 px-4 relative overflow-hidden">
@@ -95,7 +117,7 @@ const ProductsSection = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
           <p className="font-elegant text-base tracking-[0.3em] uppercase text-gold-dark mb-3">Curated Collection</p>
           <h2 className="font-display text-3xl md:text-5xl font-bold text-foreground mb-4">
@@ -106,40 +128,119 @@ const ProductsSection = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product, index) => (
-            <motion.div
-              key={product.name}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.12 }}
-              onClick={() => setSelectedProduct(product)}
-              className="product-card cursor-pointer group spotlight"
+        {/* Category tabs */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="flex justify-center gap-4 mb-6"
+        >
+          {(["gold", "silver"] as Category[]).map((cat) => (
+            <button
+              key={cat}
+              onClick={() => handleCategoryChange(cat)}
+              className="relative px-8 py-2.5 rounded-full font-display text-sm tracking-wider uppercase transition-all duration-400"
+              style={{
+                background: activeCategory === cat
+                  ? 'var(--gradient-gold)'
+                  : 'hsla(40, 28%, 97%, 0.6)',
+                color: activeCategory === cat
+                  ? 'hsl(40, 30%, 97%)'
+                  : 'hsl(28, 25%, 15%)',
+                border: activeCategory === cat
+                  ? '1px solid hsla(43, 80%, 60%, 0.5)'
+                  : '1px solid hsla(38, 50%, 65%, 0.3)',
+                boxShadow: activeCategory === cat
+                  ? 'var(--shadow-gold)'
+                  : 'none',
+              }}
             >
-              <div className="aspect-square overflow-hidden rounded-t-2xl bg-cream relative">
-                <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
-                <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-foreground/8 to-transparent pointer-events-none" />
-                {isLoggedIn && totalSaved > 0 && (
-                  <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pearl/90 backdrop-blur-sm border border-gold/20">
-                    <BadgeCheck className="w-3.5 h-3.5 text-gold-dark" />
-                    <span className="font-body text-[11px] font-semibold text-foreground">Eligible via savings</span>
-                  </div>
-                )}
-              </div>
-              <div className="p-6">
-                <h3 className="font-display text-lg font-semibold text-foreground mb-1">{product.name}</h3>
-                <p className="font-display text-xl font-bold text-gold-gradient">{product.price}</p>
-                {isLoggedIn && totalSaved > 0 && (
-                  <p className="font-body text-xs text-gold-dark mt-1">
-                    Redeem {formatINR(Math.min(totalSaved, product.numPrice))} from saved gold
-                  </p>
-                )}
-                <p className="font-body text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to explore ✦</p>
-              </div>
-            </motion.div>
+              {cat === "gold" ? "Gold Jewellery" : "Silver Jewellery"}
+            </button>
           ))}
-        </div>
+        </motion.div>
+
+        {/* Subcategory chips */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="flex flex-wrap justify-center gap-2 mb-16"
+        >
+          {subcategories[activeCategory].map((sub) => (
+            <button
+              key={sub}
+              onClick={() => setActiveSubcategory(sub)}
+              className="px-5 py-1.5 rounded-full font-body text-xs tracking-wide transition-all duration-300"
+              style={{
+                background: activeSubcategory === sub
+                  ? 'hsla(43, 80%, 55%, 0.15)'
+                  : 'transparent',
+                color: activeSubcategory === sub
+                  ? 'hsl(38, 72%, 38%)'
+                  : 'hsl(28, 12%, 40%)',
+                border: activeSubcategory === sub
+                  ? '1px solid hsla(43, 80%, 55%, 0.4)'
+                  : '1px solid hsla(38, 50%, 65%, 0.2)',
+              }}
+            >
+              {sub}
+            </button>
+          ))}
+        </motion.div>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeCategory + activeSubcategory}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.4 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {filteredProducts.length === 0 ? (
+              <div className="col-span-full text-center py-16">
+                <p className="font-elegant text-lg italic text-muted-foreground">
+                  New pieces arriving soon. Stay tuned for our latest creations.
+                </p>
+              </div>
+            ) : (
+              filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.name}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.12 }}
+                  onClick={() => setSelectedProduct(product)}
+                  className="product-card cursor-pointer group spotlight"
+                >
+                  <div className="aspect-square overflow-hidden rounded-t-2xl bg-cream relative">
+                    <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-foreground/8 to-transparent pointer-events-none" />
+                    {isLoggedIn && totalSaved > 0 && (
+                      <div className="absolute top-3 left-3 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-pearl/90 backdrop-blur-sm border border-gold/20">
+                        <BadgeCheck className="w-3.5 h-3.5 text-gold-dark" />
+                        <span className="font-body text-[11px] font-semibold text-foreground">Eligible via savings</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-6">
+                    <h3 className="font-display text-lg font-semibold text-foreground mb-1">{product.name}</h3>
+                    <p className="font-display text-xl font-bold text-gold-gradient">{product.price}</p>
+                    {isLoggedIn && totalSaved > 0 && (
+                      <p className="font-body text-xs text-gold-dark mt-1">
+                        Redeem {formatINR(Math.min(totalSaved, product.numPrice))} from saved gold
+                      </p>
+                    )}
+                    <p className="font-body text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to explore ✦</p>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
