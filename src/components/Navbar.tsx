@@ -104,7 +104,12 @@ const Navbar = () => {
               animate={{ y: [0, -3, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-7 h-7 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain" />
+              <img
+  src={suvarnaLogo}
+  alt="Suvarna Jewellers"
+  className="w-9 h-9 md:w-10 md:h-10 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain"
+/>
+
             </motion.div>
             <span className="font-display text-lg font-bold text-gold-gradient">
               Suvarna Jewellers
@@ -131,7 +136,12 @@ const Navbar = () => {
               animate={{ y: [0, -3, 0] }}
               transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
             >
-              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-8 h-8 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain" />
+             <img
+  src={suvarnaLogo}
+  alt="Suvarna Jewellers"
+  className="w-10 h-10 lg:w-11 lg:h-11 drop-shadow-sm transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 object-contain"
+/>
+
             </motion.div>
             <span className="font-display text-xl font-bold text-gold-gradient">
               Suvarna Jewellers
@@ -289,7 +299,12 @@ const Navbar = () => {
               transition={{ delay: 0.15, duration: 0.5 }}
               className="flex flex-col items-center pt-16 pb-8"
             >
-              <img src={suvarnaLogo} alt="Suvarna Jewellers" className="w-10 h-10 mb-3 object-contain" />
+              <img
+  src={suvarnaLogo}
+  alt="Suvarna Jewellers"
+  className="w-14 h-14 mb-4 object-contain"
+/>
+
               <span className="font-display text-xl font-bold text-gold-gradient">
                 Suvarna Jewellers
               </span>
