@@ -25,6 +25,7 @@ const Navbar = () => {
     { label: "Products", href: "/products" },
     { label: "Schemes", href: "/schemes" },
     { label: "Live Rates", href: "/live-rates" },
+      { label: "Contact", href: "/contact" }, // ✅ ADD THIS
   ];
 
   // Desktop nav links: add Dashboard when logged in
