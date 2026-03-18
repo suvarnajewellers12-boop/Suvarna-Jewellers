@@ -62,17 +62,18 @@ const Schemes = () => {
   const navigate = useNavigate();
 
   const handleEnroll = (scheme: typeof schemes[0]) => {
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
-    enrollScheme({
-      name: scheme.name,
+  if (!isLoggedIn) {
+    navigate("/login");
+    return;
+  }
+
+  navigate("/contact", {
+    state: {
+      schemeName: scheme.name,
       monthlyAmount: scheme.monthly,
-      totalMonths: scheme.months,
-      bonusMonths: scheme.bonus,
-    });
-  };
+    },
+  });
+};
 
   return (
     <Layout>

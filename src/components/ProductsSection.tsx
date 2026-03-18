@@ -14,8 +14,8 @@ type Category = "gold" | "silver";
 
 interface Product {
   name: string;
-  price: string;
-  numPrice: number;
+  grams: string;
+  numgrams: number;
   image: string;
   description: string;
   story: string;
@@ -24,12 +24,12 @@ interface Product {
 }
 
 const products: Product[] = [
-  { name: "Gold Necklace", price: "₹1,25,000", numPrice: 125000, image: productNecklace, description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.", story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next.", category: "gold", subcategory: "Gold Chains" },
-  { name: "Bridal Temple Set", price: "₹2,10,500", numPrice: 210500, image: productBridalSet, description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.", story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture.", category: "gold", subcategory: "Gold Bangles" },
-  { name: "Diamond Mangalsutra", price: "₹75,000", numPrice: 75000, image: productMangalsutra, description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.", story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife.", category: "gold", subcategory: "Gold Chains" },
-  { name: "Gold Bangles", price: "₹95,000", numPrice: 95000, image: productBangles, description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.", story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings.", category: "gold", subcategory: "Gold Bangles" },
-  { name: "Bridal Earrings", price: "₹55,000", numPrice: 55000, image: productEarrings, description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.", story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound.", category: "gold", subcategory: "Gold Rings" },
-  { name: "Silver Pooja Collection", price: "₹35,000", numPrice: 35000, image: productPooja, description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.", story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals.", category: "silver", subcategory: "Silver Idols" },
+  { name: "Gold Necklace", grams: "200 gms", numgrams: 200, image: productNecklace, description: "A masterpiece of traditional Indian craftsmanship, this temple-style gold necklace features intricate kundan work and delicate filigree patterns passed down through generations.", story: "In Indian tradition, a gold necklace symbolizes prosperity and is often the centerpiece of a bride's trousseau, carrying blessings from one generation to the next.", category: "gold", subcategory: "Gold Chains" },
+  { name: "Bridal Temple Set", grams: "350 gms", numgrams: 350, image: productBridalSet, description: "Complete bridal ensemble featuring a statement necklace, matching jhumka earrings, and maang tikka, all crafted in 22K gold with precious stone settings.", story: "The bridal set represents the coming together of two families, each piece carefully chosen to honor the sacred bond of marriage in Indian culture.", category: "gold", subcategory: "Gold Bangles" },
+  { name: "Diamond Mangalsutra", grams: "100 gms", numgrams: 100, image: productMangalsutra, description: "A contemporary take on the sacred mangalsutra, blending traditional black beads with a stunning diamond-encrusted gold pendant.", story: "The mangalsutra is the most sacred piece of jewelry in Indian marriages — a symbol of love, commitment, and the eternal bond between husband and wife.", category: "gold", subcategory: "Gold Chains" },
+  { name: "Gold Bangles", grams: "120 gms", numgrams: 120, image: productBangles, description: "Set of six intricately designed gold bangles featuring traditional temple motifs and meenakari enamel work in vibrant colors.", story: "The jingling of gold bangles has been the sound of celebration in Indian households for millennia, from festivals to weddings.", category: "gold", subcategory: "Gold Bangles" },
+  { name: "Bridal Earrings", grams: "80 gms", numgrams: 80, image: productEarrings, description: "Grand bridal jhumka earrings with kundan setting, pearl drops, and detailed gold filigree work that catches every ray of light.", story: "Jhumkas have adorned Indian women since the Mughal era, their bell-shaped design creating a mesmerizing dance of light and sound.", category: "gold", subcategory: "Gold Rings" },
+  { name: "Silver Pooja Collection", grams: "790 gms", numgrams: 790, image: productPooja, description: "Complete silver pooja set including an ornate thali, diya, kalash, and accessories — perfect for daily worship and special ceremonies.", story: "Every Indian home has a sacred space for worship. This collection brings divinity and beauty to your daily rituals.", category: "silver", subcategory: "Silver Idols" },
 ];
 
 const subcategories: Record<Category, string[]> = {
@@ -70,7 +70,7 @@ const ProductModal = ({ product, onClose }: { product: Product; onClose: () => v
       <div className="p-8">
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-display text-2xl font-bold text-foreground">{product.name}</h3>
-          <span className="font-display text-xl font-bold text-gold-gradient">{product.price}</span>
+          <span className="font-display text-xl font-bold text-gold-gradient">{product.grams}</span>
         </div>
         <p className="font-body text-muted-foreground mb-6">{product.description}</p>
         <div className="border-t border-gold/20 pt-6">
@@ -228,10 +228,10 @@ const ProductsSection = () => {
                   </div>
                   <div className="p-6">
                     <h3 className="font-display text-lg font-semibold text-foreground mb-1">{product.name}</h3>
-                    <p className="font-display text-xl font-bold text-gold-gradient">{product.price}</p>
+                    <p className="font-display text-xl font-bold text-gold-gradient">{product.grams}</p>
                     {isLoggedIn && totalSaved > 0 && (
                       <p className="font-body text-xs text-gold-dark mt-1">
-                        Redeem {formatINR(Math.min(totalSaved, product.numPrice))} from saved gold
+                        Redeem {formatINR(Math.min(totalSaved, product.numgrams))} from saved gold
                       </p>
                     )}
                     <p className="font-body text-xs text-muted-foreground mt-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Click to explore ✦</p>
