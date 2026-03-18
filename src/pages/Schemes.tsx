@@ -66,12 +66,11 @@ const Schemes = () => {
     navigate("/login");
     return;
   }
-
-  navigate("/contact", {
-    state: {
-      schemeName: scheme.name,
-      monthlyAmount: scheme.monthly,
-    },
+  enrollScheme({
+    name: scheme.name,
+    monthlyAmount: scheme.monthly,
+    totalMonths: scheme.months,
+    bonusMonths: scheme.bonus,
   });
 };
 
